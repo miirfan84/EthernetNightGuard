@@ -8,11 +8,11 @@ This version discovers a physical adapter whose name or description matches Ethe
 
 The query is **read-only**. It does not change network configuration, edit the registry, reset/disable the adapter, or write hardware registers.
 
-## Important LED limitation
+## LED research finding
 
-This is **not yet a working Ethernet LED controller**. No supported, safe LED-control interface has been verified for the target Realtek adapter and Windows driver. Day/Night controls remain disabled intentionally. A future implementation must first validate a documented or otherwise reliably supported Windows control interface on the exact hardware.
+The Linux kernel's `r8169` driver has public LED-control support for RTL8168H, and the upstream change reports testing on RTL8168H. That establishes a promising route to validate the hardware, but it does **not** establish a supported Windows control interface. The physical LEDs actually wired on this HP model also need testing. See [the research notes and safe validation plan](docs/LED-CONTROL-RESEARCH.md).
 
-Do not use arbitrary PCI/PHY register writes, EEPROM/eFuse programming, or adapter disablement as a substitute for LED control.
+This is **not yet a working Ethernet LED controller**. Day/Night controls remain disabled intentionally until a supported, safe Windows control mechanism is verified. Do not use arbitrary PCI/PHY register writes, EEPROM/eFuse programming, or adapter disablement as a substitute for LED control.
 
 ## Build with GitHub Actions
 
@@ -35,4 +35,4 @@ Output: `publish\EthernetNightGuard.exe`
 
 ## Next engineering step
 
-Investigate and validate a supported Windows LED-control interface for the exact Realtek PCI ID before enabling any hardware action. Keep diagnostics read-only until then.
+Validate physical LED exposure using a Linux live USB when a reboot is convenient, then continue searching for a documented Windows LED-control interface. Keep Windows diagnostics read-only until a supported method is confirmed.
