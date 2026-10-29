@@ -1,8 +1,8 @@
 <Window x:Class="EthernetNightGuard.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Ethernet NightGuard" Height="690" Width="460"
-        MinHeight="650" MinWidth="430" WindowStartupLocation="CenterScreen"
+        Title="Ethernet NightGuard" Height="720" Width="480"
+        MinHeight="680" MinWidth="450" WindowStartupLocation="CenterScreen"
         Background="{StaticResource BgBrush}" Foreground="{StaticResource TextBrush}">
     <Grid Margin="18">
         <Grid.RowDefinitions>
@@ -30,7 +30,7 @@
             </Border>
             <StackPanel Grid.Column="1" Margin="12,1,0,0" VerticalAlignment="Center">
                 <TextBlock Text="Ethernet NightGuard" FontSize="18" FontWeight="Bold"/>
-                <TextBlock Text="v0.1 · Hardware discovery prototype" Foreground="{StaticResource MutedBrush}" FontSize="11" Margin="0,3,0,0"/>
+                <TextBlock Text="v0.2 · Safe diagnostics" Foreground="{StaticResource MutedBrush}" FontSize="11" Margin="0,3,0,0"/>
             </StackPanel>
             <Button Grid.Column="2" Content="↻" Width="38" Padding="0" Click="Refresh_Click" ToolTip="Refresh adapter status"/>
         </Grid>
@@ -46,8 +46,8 @@
                 </Border>
                 <StackPanel Grid.Column="1" Margin="14,0,0,0" VerticalAlignment="Center">
                     <TextBlock Text="Ethernet status" FontSize="20" FontWeight="Bold"/>
-                    <TextBlock x:Name="ConnectionStatus" Text="Checking adapter…" FontSize="14" Foreground="#82AFFF" Margin="0,3,0,0"/>
-                    <TextBlock x:Name="AdapterDetails" Text="Realtek PCIe GbE Family Controller" FontSize="11" Foreground="{StaticResource MutedBrush}" Margin="0,5,0,0" TextWrapping="Wrap"/>
+                    <TextBlock x:Name="ConnectionStatus" Text="Checking adapters…" FontSize="14" Foreground="#82AFFF" Margin="0,3,0,0"/>
+                    <TextBlock x:Name="AdapterDetails" Text="Running read-only Windows network diagnostics." FontSize="11" Foreground="{StaticResource MutedBrush}" Margin="0,5,0,0" TextWrapping="Wrap"/>
                 </StackPanel>
             </Grid>
         </Border>
@@ -55,8 +55,8 @@
         <Border Grid.Row="4" Background="{StaticResource PanelAltBrush}" CornerRadius="14" Padding="15">
             <StackPanel>
                 <TextBlock Text="LED CONTROL" FontSize="11" FontWeight="Bold" Foreground="{StaticResource MutedBrush}"/>
-                <TextBlock Text="Not yet available" FontSize="18" FontWeight="Bold" Margin="0,7,0,3"/>
-                <TextBlock Text="Windows has not exposed an LED switch for this adapter. These buttons are intentionally disabled until a safe hardware-control method is verified." FontSize="12" Foreground="{StaticResource MutedBrush}" TextWrapping="Wrap" LineHeight="18"/>
+                <TextBlock Text="Not available yet" FontSize="18" FontWeight="Bold" Margin="0,7,0,3"/>
+                <TextBlock Text="No supported LED switch has been verified for this Realtek adapter and Windows driver. Day/Night actions stay disabled; NightGuard will not write hardware registers or disconnect your network." FontSize="12" Foreground="{StaticResource MutedBrush}" TextWrapping="Wrap" LineHeight="18"/>
                 <Grid Margin="0,14,0,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -71,33 +71,19 @@
 
         <Border Grid.Row="6" Background="{StaticResource PanelBrush}" CornerRadius="14" Padding="15">
             <StackPanel>
-                <TextBlock Text="AUTOMATION" FontSize="11" FontWeight="Bold" Foreground="{StaticResource MutedBrush}"/>
-                <TextBlock Text="Schedule preview" FontSize="16" FontWeight="Bold" Margin="0,6,0,3"/>
-                <TextBlock Text="This section is a UI preview. Scheduling is not activated because the LED control backend has not been verified." FontSize="12" Foreground="{StaticResource MutedBrush}" TextWrapping="Wrap" LineHeight="18"/>
-                <Grid Margin="0,12,0,0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <StackPanel Margin="0,0,8,0">
-                        <TextBlock Text="Day starts" FontSize="12" Foreground="{StaticResource MutedBrush}" Margin="0,0,0,6"/>
-                        <TextBox Text="08:00" IsReadOnly="True"/>
-                    </StackPanel>
-                    <StackPanel Grid.Column="1" Margin="8,0,0,0">
-                        <TextBlock Text="Night starts" FontSize="12" Foreground="{StaticResource MutedBrush}" Margin="0,0,0,6"/>
-                        <TextBox Text="22:00" IsReadOnly="True"/>
-                    </StackPanel>
-                </Grid>
+                <TextBlock Text="DIAGNOSTICS" FontSize="11" FontWeight="Bold" Foreground="{StaticResource MutedBrush}"/>
+                <TextBlock Text="Read-only adapter discovery" FontSize="16" FontWeight="Bold" Margin="0,6,0,3"/>
+                <TextBlock Text="Automatically looks for a physical Ethernet, Realtek or GbE adapter and reports its status and link speed. The query has a timeout to avoid leaving the UI stuck." FontSize="12" Foreground="{StaticResource MutedBrush}" TextWrapping="Wrap" LineHeight="18"/>
             </StackPanel>
         </Border>
 
         <Border Grid.Row="8" Background="#29251D" BorderBrush="#6B552A" BorderThickness="1" CornerRadius="12" Padding="13">
             <StackPanel>
-                <TextBlock Text="Next step" FontWeight="Bold" Foreground="#FFD58A"/>
-                <TextBlock Text="Confirm a supported LED-control interface for Realtek DEV_8168 before enabling hardware actions. No network settings are changed by this prototype." FontSize="12" Foreground="#E8DCC6" TextWrapping="Wrap" LineHeight="18" Margin="0,5,0,0"/>
+                <TextBlock Text="Safety status" FontWeight="Bold" Foreground="#FFD58A"/>
+                <TextBlock Text="Local-only. No cloud calls, registry writes, adapter resets, or network configuration changes. Physical LED control remains unverified." FontSize="12" Foreground="#E8DCC6" TextWrapping="Wrap" LineHeight="18" Margin="0,5,0,0"/>
             </StackPanel>
         </Border>
 
-        <TextBlock Grid.Row="10" Text="Local-only · No APIs · No network changes" Foreground="{StaticResource MutedBrush}" FontSize="11" HorizontalAlignment="Center" Margin="0,14,0,0"/>
+        <TextBlock Grid.Row="10" Text="Local-only · Read-only diagnostics · No network changes" Foreground="{StaticResource MutedBrush}" FontSize="11" HorizontalAlignment="Center" Margin="0,14,0,0"/>
     </Grid>
 </Window>
