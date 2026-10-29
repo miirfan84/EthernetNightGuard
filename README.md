@@ -1,23 +1,27 @@
-# Ethernet NightGuard (prototype)
+# Ethernet NightGuard
 
-A local-only WPF prototype for the HP ProBook 4 G1i / Realtek PCIe GbE Family Controller.
+A local-only WPF utility for investigating Ethernet LED control on the HP ProBook 4 G1i / Realtek PCIe GbE Family Controller.
 
-## Important limitation
+## Current status: v0.2 diagnostics
 
-This is currently a **UI and adapter-status prototype**, not a working Ethernet LED controller. The Windows driver did not expose an LED-related advanced property in the checks supplied so far. The Day/Night controls are deliberately disabled until a supported, safe hardware-control mechanism is confirmed. This app does not change network settings.
+This version discovers a physical adapter whose name or description matches Ethernet, Realtek, or GbE, then displays its Windows-reported status and link speed. The PowerShell query runs off the UI thread, drains output safely, and has a five-second timeout.
 
-## Build without installing anything on your laptop (GitHub Actions)
+The query is **read-only**. It does not change network configuration, edit the registry, reset/disable the adapter, or write hardware registers.
 
-You can use GitHub's Windows build runner to compile the app remotely.
+## Important LED limitation
 
-1. Create a new, empty GitHub repository (for example `EthernetNightGuard`).
-2. Upload the contents of this folder to the repository root, including the hidden `.github` folder.
-3. Open the repository's **Actions** tab and enable Actions if prompted.
-4. Select **Build portable Windows app** and click **Run workflow**. Alternatively, push to the `main` branch.
-5. When the workflow completes, open the run and download the `EthernetNightGuard-win-x64` artifact.
-6. Extract the ZIP and double-click `EthernetNightGuard.exe`.
+This is **not yet a working Ethernet LED controller**. No supported, safe LED-control interface has been verified for the target Realtek adapter and Windows driver. Day/Night controls remain disabled intentionally. A future implementation must first validate a documented or otherwise reliably supported Windows control interface on the exact hardware.
 
-The EXE is published as a self-contained, single-file, 64-bit Windows app, so the target laptop does not need the .NET runtime installed. The GitHub account/repository is subject to GitHub's own terms and artifact retention.
+Do not use arbitrary PCI/PHY register writes, EEPROM/eFuse programming, or adapter disablement as a substitute for LED control.
+
+## Build with GitHub Actions
+
+1. Open the repository's **Actions** tab.
+2. Select **Build portable Windows app** and run the workflow, or push a commit to a branch covered by the workflow.
+3. When the run completes, open it and download the `EthernetNightGuard-win-x64` artifact.
+4. Extract the ZIP and run `EthernetNightGuard.exe` on Windows.
+
+The workflow publishes a self-contained, single-file, 64-bit Windows app. The target laptop does not need the .NET runtime installed. GitHub artifact retention applies.
 
 ## Build locally (optional)
 
@@ -27,12 +31,8 @@ Install the .NET 8 SDK on a development machine, open PowerShell in this folder,
 dotnet publish .\EthernetNightGuard.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:EnableCompressionInSingleFile=true -o .\publish
 ```
 
-Output: `.\publish\EthernetNightGuard.exe`
-
-## Adapter alias
-
-The prototype currently looks for `Ethernet 18`, based on the supplied diagnostics. If Windows renames the adapter, edit `AdapterName`/the PowerShell query in `MainWindow.xaml.cs`.
+Output: `publish\EthernetNightGuard.exe`
 
 ## Next engineering step
 
-Identify and validate a supported Windows control interface for the exact Realtek PCI ID before implementing physical LED control. Do not write arbitrary PCI/PHY registers or disable the adapter as a substitute.
+Investigate and validate a supported Windows LED-control interface for the exact Realtek PCI ID before enabling any hardware action. Keep diagnostics read-only until then.
